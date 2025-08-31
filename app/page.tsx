@@ -1,4 +1,3 @@
-import { Nav } from "@/components/nav"
 import { Hero } from "@/components/hero"
 import { FeatureCard } from "@/components/feature-card"
 import { CTA } from "@/components/cta"
@@ -20,7 +19,6 @@ import {
 export default function HomePage() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
-      <Nav />
       <main className="mx-auto max-w-6xl space-y-10 px-4 py-8 md:space-y-14 md:py-12">
         <Hero />
 
