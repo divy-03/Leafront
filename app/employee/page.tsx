@@ -109,11 +109,16 @@ export default function Balances() {
                 )}
             </div>
 
-            <div className="w-full max-w-3xl m-10">
-                <h2 className="text-2xl font-bold text-green-900 dark:text-green-300 mb-4 flex items-center gap-2">
+            <h1 className="text-3xl font-bold text-green-900 dark:text-green-300 m-8 flex items-center gap-2">
+                <CalendarDays className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    Your Leave Requests
+            </h1>
+
+            <div className="w-full max-w-3xl mb-10">
+                {/* <h2 className="text-2xl font-bold text-green-900 dark:text-green-300 mb-4 flex items-center gap-2">
                     <CalendarDays className="h-6 w-6 text-green-600 dark:text-green-400" />
                     Your Leave Requests
-                </h2>
+                </h2> */}
                 <div className="grid gap-6">
                     {requests.length === 0 ? (
                         <div className="text-green-700 dark:text-green-400 text-lg text-center w-full">

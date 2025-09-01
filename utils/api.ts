@@ -49,3 +49,8 @@ export async function getRequests() {
   if (!res.ok) return null;
   return await res.json();
 }
+
+export async function logout() {
+  localStorage.removeItem("access_token");
+  window.location.href = "/emp-login"; // redirect to login page
+}

@@ -1,6 +1,6 @@
 "use client"
 
-import { getCurrentUser } from "@/utils/api";
+import { getCurrentUser, logout } from "@/utils/api";
 import ThemSwitch from "./theme-switch";
 import NextImage from "next/image";
 
@@ -10,6 +10,7 @@ import { LogOutIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Separator } from "./ui/separator";
 import { useEffect, useState } from "react";
+// import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 export function Nav() {
   return (
@@ -33,8 +34,8 @@ export function Nav() {
             Admin Console
           </Link>
 
-          <HeaderAuth />
 
+          <HeaderAuth />
           <ThemSwitch />
         </nav>
       </div>
@@ -52,24 +53,17 @@ type User = {
   role: string;
 };
 
-
-
 const HeaderAuth = () => {
-  // const [user, setUser] = useState({
-  //   email: null,
-  //   first_name: null,
-  //   last_name: null,
-  // });
-
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     getCurrentUser()
-      .then((data: User) => {
-        setUser(data);
-      })
-      .catch((err) => console.error("Error fetching balances:", err));
+      .then(data => setUser(data))
+      .catch(err => console.error("Error fetching user:", err));
   }, []);
+
+
+  console.log("User in Nav:", user);
 
   return (
     <div className="flex items-center gap-4 mx-2">
@@ -97,7 +91,7 @@ const HeaderAuth = () => {
 
             <button
               className="flex w-full cursor-pointer hover:bg-muted items-center gap-1 p-1"
-              type="submit"
+              onClick={logout}
             >
               <LogOutIcon className="h-4 w-4" />
               Logout
@@ -105,7 +99,7 @@ const HeaderAuth = () => {
           </PopoverContent>
         </Popover>
       ) : (
-        <Link href="/api/auth/signin" className="btn btn-primary">
+        <Link href="/emp-login" className="btn btn-primary">
           <Button className="cursor-pointer">Login</Button>
         </Link>
       )}
