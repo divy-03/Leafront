@@ -2,70 +2,44 @@
 
 import { useEffect, useState } from "react";
 import { LogIn, UserPlus } from "lucide-react";
-import { getCurrentUser } from "@/utils/api";
+// import { getCurrentUser } from "@/utils/api";
 import { useRouter } from "next/navigation";
+import { useGetCurrentUserQuery, useLoginMutation, userApi } from "@/services/userApi";
+import { toast } from "sonner";
+import { useDispatch, useSelector } from "react-redux";
+import { FullLoader } from "@/components/loader";
 
 const LoginSignupPage = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const [mode, setMode] = useState<"login" | "signup">("login");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
 
-    // 🔑 Login function
-    async function login(email: string, password: string) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/token`,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-                username: email,
-                password: password,
-            }),
-        });
+    const [login, { isLoading: loginLoading }] = useLoginMutation();
+    const { user, loading } = useSelector((state: any) => state.userReducer);
 
-        if (!res.ok) {
-            throw new Error("Login failed");
-        }
-
-        const data = await res.json();
-        localStorage.setItem("access_token", data.access_token);
-        return data;
+    if (loading) {
+        return <FullLoader message="Logout if you are logged in" />
     }
-
-    const [user, setUser] = useState({
-        email: "",
-        first_name: "",
-        last_name: "",
-    });
-
-    useEffect(() => {
-        // check if already logged in
-        getCurrentUser().then(setUser);
-    }, []);
 
     // 📌 Handle form submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
-        setMessage("");
 
         try {
             if (mode === "login") {
-                const { access_token } = await login(email, password);
-                setMessage("✅ Login successful!");
+                const { access_token } = await login({ email, password }).unwrap();
+                localStorage.setItem("access_token", access_token);
+                dispatch(userApi.util.invalidateTags(["User"]));
+                toast.success("✅ Login successful!");
                 router.push("/employee");
             } else {
-                // signup logic later
-                setMessage("🚧 Signup not implemented yet.");
+                toast.error("🚧 Signup not implemented yet.");
             }
         } catch (err: any) {
-            setMessage("❌ " + err.message);
-        } finally {
-            setLoading(false);
+            toast.error("❌ " + (err?.data?.detail || err.message));
         }
     };
 
@@ -119,7 +93,7 @@ const LoginSignupPage = () => {
                     />
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loginLoading}
                         className="
                             bg-green-700 dark:bg-green-800 
                             text-white px-6 py-2 rounded-full font-semibold shadow 
@@ -127,15 +101,13 @@ const LoginSignupPage = () => {
                             transition flex items-center justify-center gap-2 disabled:opacity-50
                         "
                     >
-                        {loading
+                        {loginLoading
                             ? "Loading..."
                             : mode === "login"
                                 ? <><LogIn className="h-5 w-5" /> Login</>
                                 : <><UserPlus className="h-5 w-5" /> Sign Up</>}
                     </button>
                 </form>
-
-                {message && <p className="text-sm text-center text-green-800 dark:text-green-300">{message}</p>}
 
                 <div className="text-green-700 dark:text-green-400 text-sm mt-4">
                     {mode === "login" ? (

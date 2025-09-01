@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useGetCurrentUserQuery } from "@/services/user";
+import { useGetCurrentUserQuery } from "@/services/userApi";
 import { userExist, userNotExist } from "@/reducers/userReducer";
 
 export function UserInitializer() {

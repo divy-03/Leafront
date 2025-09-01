@@ -1,6 +1,5 @@
 "use client"
 
-import { getCurrentUser, logout } from "@/utils/api";
 import ThemSwitch from "./theme-switch";
 import NextImage from "next/image";
 
@@ -9,7 +8,8 @@ import { Button } from "./ui/button";
 import { LogOutIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Separator } from "./ui/separator";
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { userApi } from "@/services/userApi";
 // import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 export function Nav() {
@@ -54,16 +54,28 @@ type User = {
 };
 
 const HeaderAuth = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, loading } = useSelector((state: any) => state.userReducer);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    getCurrentUser()
-      .then(data => setUser(data))
-      .catch(err => console.error("Error fetching user:", err));
-  }, []);
+  const handleLogout = () => {
+    // If using localStorage:
+    localStorage.removeItem("access_token");
 
+    // Reset cached user data
+    dispatch(userApi.util.resetApiState());
+  };
 
-  console.log("User in Nav:", user);
+  // Example: Manually refetch user (if needed)
+  // const handleRefresh = () => {
+  //   dispatch(userApi.endpoints.getCurrentUser.initiate());
+  // };
+
+  // console.log("Loading in Nav:", loading);
+  if (loading) {
+    return <div className="mx-2">Loading...</div>;
+  }
+
+  // console.log("User in Nav:", user);
 
   return (
     <div className="flex items-center gap-4 mx-2">
@@ -91,7 +103,7 @@ const HeaderAuth = () => {
 
             <button
               className="flex w-full cursor-pointer hover:bg-muted items-center gap-1 p-1"
-              onClick={logout}
+              onClick={handleLogout}
             >
               <LogOutIcon className="h-4 w-4" />
               Logout
