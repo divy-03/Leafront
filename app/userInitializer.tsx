@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useGetCurrentUserQuery } from "@/services/user";
 import { userExist, userNotExist } from "@/reducers/userReducer";
-import { FullLoader } from "@/components/loader";
 
 export function UserInitializer() {
     const dispatch = useDispatch();
@@ -18,7 +17,7 @@ export function UserInitializer() {
         }
     }, [data, error, dispatch]);
 
-    if (isLoading) return <FullLoader message="Growing your profile..." />;
+    // if (isLoading) return <FullLoader message="Growing your profile..." />;
 
     //   console.log("UserInitializer data:", data);
 
