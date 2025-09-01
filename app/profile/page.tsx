@@ -1,5 +1,6 @@
 "use client"
 
+import { FullLoader } from "@/components/loader";
 import { useSelector } from "react-redux";
 
 export default function Profile() {
@@ -9,15 +10,7 @@ export default function Profile() {
     // console.log("User from Redux:", user);
 
     if (loading) {
-        return (
-            <div className="
-                min-h-[calc(100dvh-4rem)] flex items-center justify-center
-                bg-gradient-to-br from-green-50 via-white to-green-100
-                dark:bg-gradient-to-br dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900
-            ">
-                <p className="text-green-700 dark:text-green-400 text-lg">Loading profile...</p>
-            </div>
-        );
+        return <FullLoader message="🌿 Growing your profile..." />
     }
 
     if (!user) {

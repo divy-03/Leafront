@@ -4,6 +4,7 @@ import { getBalances, getRequests } from "@/utils/api";
 import { useEffect, useState } from "react";
 import { BadgeCheck, CalendarDays } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { FullLoader } from "@/components/loader";
 
 export default function Balances() {
     const [balances, setBalances] = useState<any[]>([]);
@@ -51,9 +52,7 @@ export default function Balances() {
             </h1>
             <div className="grid gap-6 md:grid-cols-2 w-full max-w-3xl">
                 {balances.length === 0 ? (
-                    <div className="text-green-700 dark:text-green-400 text-lg text-center w-full">
-                        Loading balances...
-                    </div>
+                    <FullLoader message="Getting your leaf " />
                 ) : (
                     balances.map((item, idx) => (
                         <div
