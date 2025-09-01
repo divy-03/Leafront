@@ -32,7 +32,7 @@ export default function Balances() {
 
     if (requests === null) {
         return (
-            <div className="min-h-dvh flex items-center justify-center">
+            <div className="min-h-[calc(100dvh-4rem)] flex items-center justify-center">
                 <p className="text-red-600 dark:text-red-400">Error loading requests. Please try again.</p>
             </div>
         );

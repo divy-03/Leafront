@@ -1,15 +1,17 @@
 "use client"
 
-import { useGetCurrentUserQuery } from "@/services/user";
-import { User } from "@/types"; 
+import { useSelector } from "react-redux";
 
 export default function Profile() {
-    const { data, isLoading } = useGetCurrentUserQuery();
+    // const { data, isLoading } = useGetCurrentUserQuery();
+    const { user, loading } = useSelector((state: any) => state.userReducer);
 
-    if (isLoading) {
+    // console.log("User from Redux:", user);
+
+    if (loading) {
         return (
             <div className="
-                min-h-dvh flex items-center justify-center
+                min-h-[calc(100dvh-4rem)] flex items-center justify-center
                 bg-gradient-to-br from-green-50 via-white to-green-100
                 dark:bg-gradient-to-br dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900
             ">
@@ -18,10 +20,10 @@ export default function Profile() {
         );
     }
 
-    if (!data) {
+    if (!user) {
         return (
             <div className="
-                min-h-dvh flex items-center justify-center
+                min-h-[calc(100dvh-4rem)] flex items-center justify-center
                 bg-gradient-to-br from-green-50 via-white to-green-100
                 dark:bg-gradient-to-br dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900
             ">
@@ -30,11 +32,11 @@ export default function Profile() {
         );
     }
 
-    const user: User = data;
+    // const user: User = data;
 
     return (
         <div className="
-            min-h-dvh flex flex-col items-center py-12
+            min-h-[calc(100dvh-4rem)] flex flex-col items-center py-12
             bg-gradient-to-br from-green-50 via-white to-green-100
             dark:bg-gradient-to-br dark:from-zinc-900 dark:via-zinc-950 dark:to-zinc-900
         ">
