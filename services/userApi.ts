@@ -24,7 +24,7 @@ export const userApi = createApi({
             providesTags: ["User"], // 👈 tells RTKQ this query provides "User"
         }),
 
-        getBalances: builder.query<LeaveBalance | null, void>({
+        getBalances: builder.query<LeaveBalance[] | null, void>({
             query: () => "/users/me/balances",
         }),
 
