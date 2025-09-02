@@ -3,19 +3,24 @@
 import { FullLoader } from "@/components/loader";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const { user, loading } = useSelector((state: any) => state.userReducer);
 
   useEffect(() => {
-    if (!token) {
-      router.replace("/login"); // redirect to login if no token
+    if (!loading && !user) {
+      router.push("/login");
     }
-  }, [token, router]);
+  }, [loading, user, router]);
 
-  if (!token) {
-    return <FullLoader message="Checking authentication..." />;
+  if (loading) {
+    return <FullLoader message="🌿 Growing your dashboard..." />;
+  }
+
+  if (!user) {
+    return null; // Already redirected
   }
 
   return <>{children}</>;

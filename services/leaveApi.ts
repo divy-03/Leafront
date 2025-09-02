@@ -14,12 +14,33 @@ export const leaveApi = createApi({
             return headers;
         },
     }),
+    tagTypes: ["LeaveType"], // ✅ add tag type for invalidation
     endpoints: (builder) => ({
         // 🔹 GET /leave-requests/
         getRequests: builder.query<any[] | null, void>({
             query: () => "/leave-requests/",
         }),
+
+        // 🔹 GET /leave-requests/types
+        getAllLeaveTypes: builder.query<any[] | null, void>({
+            query: () => "/leave-requests/types",
+            providesTags: ["LeaveType"], // ✅ so list gets updated
+        }),
+
+        // 🔹 POST /leave-types
+        createLeaveType: builder.mutation<any, { name: string; description?: string }>({
+            query: (newType) => ({
+                url: "/leave-types",
+                method: "POST",
+                body: newType,
+            }),
+            invalidatesTags: ["LeaveType"], // ✅ refetch list after creation
+        }),
     }),
 });
 
-export const { useGetRequestsQuery } = leaveApi;
+export const { 
+    useGetRequestsQuery, 
+    useGetAllLeaveTypesQuery, 
+    useCreateLeaveTypeMutation 
+} = leaveApi;

@@ -15,7 +15,7 @@ export default function Balances() {
 
   // 🔹 Handle redirect if balances API says unauthenticated
   if (balancesError) {
-    router.push("/emp-login");
+    router.push("/login");
     return null;
   }
 

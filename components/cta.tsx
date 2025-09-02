@@ -10,7 +10,7 @@ export function CTA() {
         </blockquote>
         <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button asChild className="bg-green-600 hover:bg-green-700">
-            <Link href="/emp-login">Login as Employee</Link>
+            <Link href="/login">Login as Employee</Link>
           </Button>
           <Button
             asChild

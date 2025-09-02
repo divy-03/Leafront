@@ -71,9 +71,9 @@ const HeaderAuth = () => {
   // };
 
   // console.log("Loading in Nav:", loading);
-  if (loading) {
-    return <div className="mx-2">Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div className="mx-2">Loading...</div>;
+  // }
 
   // console.log("User in Nav:", user);
 
@@ -111,7 +111,7 @@ const HeaderAuth = () => {
           </PopoverContent>
         </Popover>
       ) : (
-        <Link href="/emp-login" className="btn btn-primary">
+        <Link href="/login" className="btn btn-primary">
           <Button className="cursor-pointer">Login</Button>
         </Link>
       )}
