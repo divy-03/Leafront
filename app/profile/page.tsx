@@ -1,11 +1,15 @@
 "use client"
 
 import { FullLoader } from "@/components/loader";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/store/hooks";
+import { User } from "@/types";
 
 export default function Profile() {
     // const { data, isLoading } = useGetCurrentUserQuery();
-    const { user, loading } = useSelector((state: any) => state.userReducer);
+    const { user, loading } = useAppSelector((state) => state.userReducer as {
+        user: User | null;
+        loading: boolean;
+    });
 
     // console.log("User from Redux:", user);
 

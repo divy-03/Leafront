@@ -8,8 +8,10 @@ import { Button } from "./ui/button";
 import { LogOutIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Separator } from "./ui/separator";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userApi } from "@/services/userApi";
+import { useAppSelector } from "@/store/hooks";
+import { User } from "@/types";
 // import { AuthProvider, useAuth } from "@/context/AuthContext";
 
 export function Nav() {
@@ -43,18 +45,12 @@ export function Nav() {
   )
 }
 
-type User = {
-  email: string;
-  first_name: string;
-  last_name: string;
-  department_id: number;
-  user_id: number;
-  join_date: string;
-  role: string;
-};
-
 const HeaderAuth = () => {
-  const { user, loading } = useSelector((state: any) => state.userReducer);
+  const { user, loading } = useAppSelector((state) => state.userReducer as {
+    user: User | null;
+    loading: boolean;
+  });
+
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -71,9 +67,9 @@ const HeaderAuth = () => {
   // };
 
   // console.log("Loading in Nav:", loading);
-  // if (loading) {
-  //   return <div className="mx-2">Loading...</div>;
-  // }
+  if (loading) {
+    return <div className="mx-2">Loading...</div>;
+  }
 
   // console.log("User in Nav:", user);
 

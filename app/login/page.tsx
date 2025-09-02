@@ -5,12 +5,17 @@ import { LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLoginMutation, userApi } from "@/services/userApi";
 import { toast } from "sonner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/store/hooks";
+import { User } from "@/types";
 
 const LoginPage = () => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const { user, loading } = useSelector((state: any) => state.userReducer);
+    const { user, loading } = useAppSelector((state) => state.userReducer as {
+        user: User | null;
+        loading: boolean;
+    });
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -25,7 +30,7 @@ const LoginPage = () => {
             localStorage.setItem("access_token", access_token);
             dispatch(userApi.util.invalidateTags(["User"]));
             toast.success("✅ Login successful!");
-            if (!loading) {
+            if (user && !loading) {
                 if (user.role === "Employee") {
                     toast.success("🍃 Welcome back, " + user.first_name + "!");
                     router.push("/employee");
@@ -34,9 +39,8 @@ const LoginPage = () => {
                     router.push("/admin");
                 }
             }
-        } catch (err: any) {
-            toast.error("❌ " + (err?.data?.detail || err.message));
-            console.log("Login error:", err);
+        } catch {
+            toast.error("❌ " + "Invalid email or password.");
         }
     };
 

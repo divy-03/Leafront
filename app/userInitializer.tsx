@@ -17,7 +17,7 @@ export function UserInitializer() {
         }
     }, [data, error, dispatch]);
 
-    // if (isLoading) return <FullLoader message="Growing your profile..." />;
+    if (isLoading) return null;
 
     //   console.log("UserInitializer data:", data);
 

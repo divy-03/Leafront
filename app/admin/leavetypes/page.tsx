@@ -1,7 +1,10 @@
 "use client"
 
 import { FullLoader } from "@/components/loader";
-import { useGetAllLeaveTypesQuery, useCreateLeaveTypeMutation } from "@/services/leaveApi";
+import { 
+    useGetAllLeaveTypesQuery, 
+    // useCreateLeaveTypeMutation 
+} from "@/services/leaveApi";
 import { BadgeCheck, Leaf } from "lucide-react";
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
@@ -17,6 +20,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { LeaveType } from "@/types";
 
 export default function LeaveTypes() {
     const { data: balances, isLoading } = useGetAllLeaveTypesQuery();
@@ -43,10 +47,10 @@ export default function LeaveTypes() {
             <div className="grid gap-6 md:grid-cols-2 w-full max-w-3xl">
                 {!balances || balances.length === 0 ? (
                     <p className="text-green-700 dark:text-green-400 text-lg text-center w-full">
-                        No leave balances found.
+                        No leave type found
                     </p>
                 ) : (
-                    balances.map((item: any, idx: number) => (
+                    balances.map((item: LeaveType, idx: number) => (
                         <div
                             key={idx}
                             className="
@@ -96,7 +100,7 @@ export default function LeaveTypes() {
 }
 
 export function AddLeaveType() {
-    const [addLeaveType, { isLoading }] = useCreateLeaveTypeMutation()
+    // const [addLeaveType, { isLoading }] = useCreateLeaveTypeMutation()
     const [formData, setFormData] = useState({ name: "", username: "" })
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +113,8 @@ export function AddLeaveType() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         try {
-            await addLeaveType(formData).unwrap() // 👈 call mutation
+            // await addLeaveType(formData).unwrap() // 👈 call mutation
+            console.log("Form submitted:", formData);
             setFormData({ name: "", username: "" }) // reset form
         } catch (err) {
             console.error("Failed to add leave type:", err)
@@ -160,8 +165,8 @@ export function AddLeaveType() {
                         <DialogClose asChild>
                             <Button variant="outline" type="button">Cancel</Button>
                         </DialogClose>
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading ? "Saving..." : "Save changes"}
+                        <Button type="submit" disabled={false}> {/* 👈 change to isLoading */}
+                            {false ? "Saving..." : "Save changes"} {/* 👈 change to isLoading */}
                         </Button>
                     </DialogFooter>
                 </form>

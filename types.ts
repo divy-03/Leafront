@@ -4,7 +4,7 @@ export type User = {
     first_name: string;
     join_date: string;
     last_name: string;
-    role: string;
+    role: "Admin" | "Employee";
     user_id: number;
 };
 
@@ -21,4 +21,16 @@ export interface LeaveBalance {
   year: number;
   balance_days: string;   // same here → can be number if API gives numeric values
   used_days: string;
+}
+
+export interface LeaveRequest {
+  request_id: number;
+  user_id: User;
+  leave_type: LeaveType;
+  start_date: string;  // ISO date string
+  end_date: string;    // ISO date string
+  reason: string;
+  status: "Pending" | "Approved" | "Rejected";
+  total_days: string;
+  is_half_day: boolean;
 }

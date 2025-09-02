@@ -1,9 +1,6 @@
 "use client"
 
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 import { ClipboardList, Building2, Leaf, Users, BadgeCheck, UserCheck } from "lucide-react";
-import { FullLoader } from "@/components/loader";
 
 const adminFeatures = [
     {

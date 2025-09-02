@@ -2,10 +2,17 @@
 
 import { FullLoader } from "@/components/loader";
 import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
+import { useAppSelector } from "@/store/hooks";
+import { User } from "@/types";
 
 export default function AdminRoute({ children }: { children: React.ReactNode }) {
-    const { user, loading } = useSelector((state: any) => state.userReducer);
+
+    const { user, loading } = useAppSelector((state) => state.userReducer as {
+        user: User | null;
+        loading: boolean;
+    });
+
     const router = useRouter();
 
     if (loading) {

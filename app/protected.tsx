@@ -1,13 +1,17 @@
 "use client";
 
 import { FullLoader } from "@/components/loader";
+import { useAppSelector } from "@/store/hooks";
+import { User } from "@/types";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, loading } = useSelector((state: any) => state.userReducer);
+  const { user, loading } = useAppSelector((state) => state.userReducer as {
+    user: User | null;
+    loading: boolean;
+  });
 
   useEffect(() => {
     if (!loading && !user) {

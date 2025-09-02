@@ -1,6 +1,6 @@
 // services/userApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "@/types";
+import { LeaveBalance, User } from "@/types";
 
 export const userApi = createApi({
     reducerPath: "userApi",
@@ -24,7 +24,7 @@ export const userApi = createApi({
             providesTags: ["User"], // 👈 tells RTKQ this query provides "User"
         }),
 
-        getBalances: builder.query<any | null, void>({
+        getBalances: builder.query<LeaveBalance | null, void>({
             query: () => "/users/me/balances",
         }),
 
