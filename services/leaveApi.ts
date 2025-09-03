@@ -1,4 +1,4 @@
-import { LeaveRequest, LeaveType } from "@/types";
+import { LeaveRequest, LeaveType, LeaveTypeReq } from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const leaveApi = createApi({
@@ -29,19 +29,20 @@ export const leaveApi = createApi({
         }),
 
         // 🔹 POST /leave-types
-        // createLeaveType: builder.mutation<any, { name: string; description?: string }>({
-        //     query: (newType) => ({
-        //         url: "/leave-types",
-        //         method: "POST",
-        //         body: newType,
-        //     }),
-        //     invalidatesTags: ["LeaveType"], // ✅ refetch list after creation
-        // }),
+        createLeaveType: builder.mutation<LeaveType, LeaveTypeReq>({
+            query: (newType) => ({
+                url: "/admin/leave-types",
+                method: "POST",
+                body: newType,
+            }),
+            invalidatesTags: ["LeaveType"], // ✅ refresh list after creation
+        }),
+
     }),
 });
 
-export const { 
-    useGetRequestsQuery, 
-    useGetAllLeaveTypesQuery, 
-    // useCreateLeaveTypeMutation 
+export const {
+    useGetRequestsQuery,
+    useGetAllLeaveTypesQuery,
+    useCreateLeaveTypeMutation
 } = leaveApi;

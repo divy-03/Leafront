@@ -1,12 +1,19 @@
 export type User = {
-    department_id: number;
-    email: string;
-    first_name: string;
-    join_date: string;
-    last_name: string;
-    role: "Admin" | "Employee";
-    user_id: number;
+  department_id: number;
+  email: string;
+  first_name: string;
+  join_date: string;
+  last_name: string;
+  role: "Admin" | "Employee";
+  user_id: number;
 };
+
+export interface LeaveTypeReq {
+  name: string;
+  paid: boolean;
+  annual_quota: string;   // can be number
+  carry_forward: boolean;
+}
 
 export interface LeaveType {
   name: string;

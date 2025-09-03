@@ -1,8 +1,9 @@
 "use client"
 
 import { FullLoader } from "@/components/loader";
-import { 
-    useGetAllLeaveTypesQuery, 
+import {
+    useCreateLeaveTypeMutation,
+    useGetAllLeaveTypesQuery,
     // useCreateLeaveTypeMutation 
 } from "@/services/leaveApi";
 import { BadgeCheck, Leaf } from "lucide-react";
@@ -20,7 +21,8 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { LeaveType } from "@/types";
+import { LeaveType, LeaveTypeReq } from "@/types";
+import { toast } from "sonner";
 
 export default function LeaveTypes() {
     const { data: balances, isLoading } = useGetAllLeaveTypesQuery();
@@ -100,26 +102,33 @@ export default function LeaveTypes() {
 }
 
 export function AddLeaveType() {
-    // const [addLeaveType, { isLoading }] = useCreateLeaveTypeMutation()
-    const [formData, setFormData] = useState({ name: "", username: "" })
+    const [addLeaveType, { isLoading }] = useCreateLeaveTypeMutation();
+
+    const [formData, setFormData] = useState<LeaveTypeReq>({
+        name: "",
+        paid: true,
+        annual_quota: "",
+        carry_forward: false,
+    });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value, type, checked } = e.target;
         setFormData((prev) => ({
             ...prev,
-            [e.target.name]: e.target.value,
-        }))
-    }
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            // await addLeaveType(formData).unwrap() // 👈 call mutation
-            console.log("Form submitted:", formData);
-            setFormData({ name: "", username: "" }) // reset form
-        } catch (err) {
-            console.error("Failed to add leave type:", err)
+            await addLeaveType(formData).unwrap(); // 👈 call mutation
+            toast.success("Leave type added successfully!");
+            setFormData({ name: "", paid: true, annual_quota: "", carry_forward: false }); // reset
+        } catch {
+            toast.error("Failed to add leave type");
         }
-    }
+    };
 
     return (
         <Dialog>
@@ -137,6 +146,7 @@ export function AddLeaveType() {
                     </DialogHeader>
 
                     <div className="grid gap-4">
+                        {/* Name */}
                         <div className="grid gap-3">
                             <Label htmlFor="name">Name</Label>
                             <Input
@@ -144,20 +154,46 @@ export function AddLeaveType() {
                                 name="name"
                                 value={formData.name}
                                 onChange={handleChange}
-                                placeholder="Leave name"
+                                placeholder="Leave name (e.g. Maternity Leave)"
                                 required
                             />
                         </div>
+
+                        {/* Annual Quota */}
                         <div className="grid gap-3">
-                            <Label htmlFor="username">Username</Label>
+                            <Label htmlFor="annual_quota">Annual Quota</Label>
                             <Input
-                                id="username"
-                                name="username"
-                                value={formData.username}
+                                id="annual_quota"
+                                name="annual_quota"
+                                value={formData.annual_quota}
                                 onChange={handleChange}
-                                placeholder="Unique username"
+                                placeholder="40.00"
                                 required
                             />
+                        </div>
+
+                        {/* Paid Checkbox */}
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="paid"
+                                name="paid"
+                                checked={formData.paid}
+                                onChange={handleChange}
+                            />
+                            <Label htmlFor="paid">Paid</Label>
+                        </div>
+
+                        {/* Carry Forward Checkbox */}
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="carry_forward"
+                                name="carry_forward"
+                                checked={formData.carry_forward}
+                                onChange={handleChange}
+                            />
+                            <Label htmlFor="carry_forward">Carry Forward</Label>
                         </div>
                     </div>
 
@@ -165,12 +201,12 @@ export function AddLeaveType() {
                         <DialogClose asChild>
                             <Button variant="outline" type="button">Cancel</Button>
                         </DialogClose>
-                        <Button type="submit" disabled={false}> {/* 👈 change to isLoading */}
-                            {false ? "Saving..." : "Save changes"} {/* 👈 change to isLoading */}
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? "Saving..." : "Save changes"}
                         </Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
