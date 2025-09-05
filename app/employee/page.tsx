@@ -6,12 +6,21 @@ import { useGetBalancesQuery } from "@/services/userApi";
 import { LeaveBalance } from "@/types";
 import { BadgeCheck, CalendarDays } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { AddRequest } from "./component";
 
 export default function Balances() {
   const router = useRouter();
 
-  const { data: balances, isLoading: balancesLoading, isError: balancesError } = useGetBalancesQuery();
-  const { data: requests, isLoading: requestsLoading, isError: requestsError } = useGetRequestsQuery();
+  const {
+    data: balances,
+    isLoading: balancesLoading,
+    isError: balancesError,
+  } = useGetBalancesQuery();
+  const {
+    data: requests,
+    isLoading: requestsLoading,
+    isError: requestsError,
+  } = useGetRequestsQuery();
 
   // 🔹 Handle redirect if balances API says unauthenticated
   if (balancesError) {
@@ -19,15 +28,17 @@ export default function Balances() {
     return null;
   }
 
-  // use skeleton instead of these loading 
+  // use skeleton instead of these loading
   if (balancesLoading || requestsLoading) {
-    return <FullLoader message="Loading your info" />
+    return <FullLoader message="Loading your info" />;
   }
 
   if (requestsError) {
     return (
       <div className="min-h-[calc(100dvh-4rem)] flex items-center justify-center">
-        <p className="text-red-600 dark:text-red-400">Error loading requests. Please try again.</p>
+        <p className="text-red-600 dark:text-red-400">
+          Error loading requests. Please try again.
+        </p>
       </div>
     );
   }
@@ -107,6 +118,7 @@ export default function Balances() {
       <h1 className="text-3xl font-bold text-green-900 dark:text-green-300 m-8 flex items-center gap-2">
         <CalendarDays className="h-6 w-6 text-green-600 dark:text-green-400" />
         Your Leave Requests
+        <AddRequest />
       </h1>
 
       <div className="w-full max-w-3xl mb-10">
@@ -146,11 +158,13 @@ export default function Balances() {
                   <span
                     className={`
                       ml-2 px-2 py-0.5 rounded-full text-xs font-medium
-                      ${req.status === "Pending"
+                      ${
+                        req.status === "Pending"
                           ? "bg-yellow-100 dark:bg-yellow-800 text-yellow-700 dark:text-yellow-200"
                           : req.status === "Approved"
                           ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200"
-                          : "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200"}
+                          : "bg-red-100 dark:bg-red-800 text-red-700 dark:text-red-200"
+                      }
                     `}
                   >
                     {req.status}
@@ -159,7 +173,9 @@ export default function Balances() {
                 <div className="flex flex-wrap gap-4 mt-2 text-green-700 dark:text-green-400">
                   <div className="flex items-center gap-1">
                     <span className="font-medium">Dates:</span>
-                    <span>{req.start_date} → {req.end_date}</span>
+                    <span>
+                      {req.start_date} → {req.end_date}
+                    </span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="font-medium">Total Days:</span>

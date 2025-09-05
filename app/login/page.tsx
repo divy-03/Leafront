@@ -30,6 +30,7 @@ const LoginPage = () => {
             localStorage.setItem("access_token", access_token);
             dispatch(userApi.util.invalidateTags(["User"]));
             toast.success("✅ Login successful!");
+            // the below code lags because I'm not sending user directly from login response but fetching separately
             if (user && !loading) {
                 if (user.role === "Employee") {
                     toast.success("🍃 Welcome back, " + user.first_name + "!");

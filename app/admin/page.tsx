@@ -12,7 +12,7 @@ const adminFeatures = [
     {
         title: "All Requests",
         description: "See every leave request in the system.",
-        href: "/admin/all-requests",
+        href: "/admin/leaverequests",
         icon: <ClipboardList className="h-6 w-6 text-green-600 dark:text-green-400" />,
     },
     {
