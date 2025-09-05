@@ -55,4 +55,35 @@ export interface AdminLeaveRequest {
   reason: string;
   status: "Pending" | "Approved" | "Rejected";
   total_days: string;
+  // is_half_day: boolean;
+}
+
+export interface UpdateLeavePayload {
+  request_id: number;
+  status: string;
+  approval_note: string;
+}
+
+export interface FailedResponse {
+  data: string;
+  status: number;
+}
+
+export interface UpdateLeaveResponse {
+  end_date: string;
+  is_half_day: boolean;
+  leave_type: LeaveType;
+  reason: string;
+  request_id: number;
+  start_date: string;
+  status: "Pending" | "Approved" | "Rejected";
+  total_days: string;
+  user_id: number;
+}
+
+export interface createLeaveRequestPayload {
+  leave_type_id: string;
+  start_date: string; // ISO date string
+  end_date: string; // ISO date string
+  reason: string;
 }

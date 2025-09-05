@@ -1,4 +1,13 @@
-import { LeaveRequest, LeaveType, LeaveTypeReq } from "@/types";
+import {
+  AdminLeaveRequest,
+  createLeaveRequestPayload,
+  FailedResponse,
+  LeaveRequest,
+  LeaveType,
+  LeaveTypeReq,
+  UpdateLeavePayload,
+  UpdateLeaveResponse,
+} from "@/types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const leaveApi = createApi({
@@ -28,6 +37,18 @@ export const leaveApi = createApi({
       providesTags: ["LeaveType"], // ✅ so list gets updated
     }),
 
+    createLeaveRequest: builder.mutation<
+      LeaveRequest | null,
+      createLeaveRequestPayload
+    >({
+      query: (newRequest) => ({
+        url: "/leave-requests",
+        method: "POST",
+        body: newRequest,
+      }),
+      invalidatesTags: ["LeaveType"],
+    }),
+
     // 🔹 POST /leave-types
     createLeaveType: builder.mutation<LeaveType | null, LeaveTypeReq>({
       query: (newType) => ({
@@ -43,11 +64,14 @@ export const leaveApi = createApi({
     //             ? `/admin/leave-requests?status=${status}`
     //             : `/admin/leave-requests`,
     // }),
-    getAdminRequests: builder.query<any | null, void>({
+    getAdminRequests: builder.query<AdminLeaveRequest[] | null, void>({
       query: () => `/admin/leave-requests`,
     }),
 
-    updateLeaveStatus: builder.mutation<any | null, { request_id: number; status: string, approval_note: string }>({
+    updateLeaveStatus: builder.mutation<
+      UpdateLeaveResponse | FailedResponse,
+      UpdateLeavePayload
+    >({
       query: ({ request_id, status, approval_note }) => ({
         url: `/admin/leave-requests/${request_id}`,
         method: "PATCH",
@@ -66,5 +90,6 @@ export const {
   useGetAllLeaveTypesQuery,
   useCreateLeaveTypeMutation,
   useGetAdminRequestsQuery,
-  useUpdateLeaveStatusMutation
+  useUpdateLeaveStatusMutation,
+  useCreateLeaveRequestMutation,
 } = leaveApi;

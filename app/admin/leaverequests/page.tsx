@@ -71,6 +71,7 @@ export default function AdminLeaveRequestsPage() {
         status: data.status,
         approval_note: data.approvalNote,
       }).unwrap();
+      // console.log("Update response:", responsee);
     } catch (err) {
       console.log("Error updating leave status:", err);
       toast.error("Leave request has already been processed.");
